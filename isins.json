@@ -1,0 +1,84 @@
+{
+    "shares": [
+        {
+            "isin": "DE0008404005",
+            "ticker": "ALV.DE",
+            "name": "ALLIANZ SE NA O.N."
+        },
+        {
+            "isin": "US02079K1079",
+            "ticker": "GOOG",
+            "name": "Alphabet C"
+        },
+        {
+            "isin": "US0231351067",
+            "ticker": "AMZN",
+            "name": "Amazon"
+        },
+        {
+            "isin": "US0079031078",
+            "ticker": "AMD",
+            "name": "AMD (Advanced Micro Devices)"
+        },
+        {
+            "isin": "NL0010273215",
+            "ticker": "ASML.AS",
+            "name": "ASML Holding N.V."
+        },
+        {
+            "isin": "US1491231015",
+            "ticker": "CAT",
+            "name": "Caterpillar Inc."
+        },
+        {
+            "isin": "US1912161007",
+            "ticker": "KO",
+            "name": "COCA-COLA CO. DL-,25"
+        },
+        {
+            "isin": "US5398301094",
+            "ticker": "LOM.DE",
+            "name": "LOCKHEED MARTIN DL 1"
+        },
+        {
+            "isin": "US5801351017",
+            "ticker": "MDO.DE",
+            "name": "McDonald's Corporation"
+        },
+        {
+            "isin": "US5949181045",
+            "ticker": "MSFT",
+            "name": "MICROSOFT"
+        },
+        {
+            "isin": "DE0008430026",
+            "ticker": "MUV2.DE",
+            "name": "Münchener Rück"
+        },
+        {
+            "isin": "CH0038863350",
+            "ticker": "NESN.SW",
+            "name": "NESTLE NAM. SF-,10"
+        },
+        {
+            "isin": "US67066G1040",
+            "ticker": "NVDA",
+            "name": "NVIDIA"
+        },
+        {
+            "isin": "US88160R1014",
+            "ticker": "TSLA",
+            "name": "TESLA INC."
+        },
+        {
+            "isin": "GB00B10RZP78",
+            "ticker": "ULVR.L",
+            "name": "Unilever PLC"
+        },
+        {
+            "isin": "US94106L1098",
+            "ticker": "WM",
+            "name": "WASTE MANAGEMENT (DEL.)"
+        }
+    ]
+}

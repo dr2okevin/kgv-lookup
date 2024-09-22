@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P/E Ratios Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chart-container {
+            width: 80%;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>P/E Ratios Visualization</h1>
+    <div id="combined-chart-container">
+        <h2>Combined P/E Ratio Comparison</h2>
+        <canvas id="combinedChart"></canvas>
+    </div>
+    <div id="charts"></div> <!-- Container for all individual charts -->
+
+    <script>
+        // Function to load JSON data
+        async function loadJson(file) {
+            const response = await fetch(file);
+            if (!response.ok) {
+                console.error(`Failed to load JSON: ${file}`);
+                return null;
+            }
+            return response.json();
+        }
+
+        // Function to create an individual chart for each share
+        async function createChartForShare(share, combinedData) {
+            // Automatically generate the JSON file path based on the ISIN
+            const jsonFile = `${share.isin}_pe_cache.json`;
+
+            const data = await loadJson(jsonFile);
+            if (!data) return; // Skip if the data couldn't be loaded
+
+            const dates = Object.keys(data);
+            const peRatios = Object.values(data);
+
+            // Set combined chart labels (dates) based on the first stock
+            if (!combinedData.labels) {
+                combinedData.labels = dates;
+            }
+
+            // Align the P/E ratios with the combined chart's labels
+            const alignedPeRatios = alignDataWithDates(combinedData.labels, dates, peRatios);
+
+            // Add data for combined chart
+            combinedData.datasets.push({
+                label: share.name,
+                data: alignedPeRatios,
+                borderColor: getRandomColor(), // Generate random color for each stock
+                borderWidth: 2,
+                fill: false,
+                tension: 0.1
+            });
+
+            // Create a container for each individual chart
+            const chartContainer = document.createElement('div');
+            chartContainer.className = 'chart-container';
+            chartContainer.innerHTML = `<h2>${share.name} (ISIN: ${share.isin})</h2><canvas id="${share.isin}_chart"></canvas>`;
+            document.getElementById('charts').appendChild(chartContainer);
+
+            const ctx = document.getElementById(`${share.isin}_chart`).getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'P/E Ratio',
+                        data: peRatios,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'P/E Ratio'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Function to align data with a common set of dates (labels)
+        function alignDataWithDates(commonDates, stockDates, stockData) {
+            const alignedData = [];
+            let stockIndex = 0;
+
+            commonDates.forEach(date => {
+                if (date === stockDates[stockIndex]) {
+                    alignedData.push(stockData[stockIndex]);
+                    stockIndex++;
+                } else {
+                    alignedData.push(null); // Fill missing data with null
+                }
+            });
+
+            return alignedData;
+        }
+
+        // Function to load isins.json and create charts for each share
+        async function loadSharesAndCreateCharts() {
+            const metadata = await loadJson('isins.json'); // Load isins.json
+            if (!metadata || !metadata.shares) {
+                console.error("Failed to load shares metadata from isins.json");
+                return;
+            }
+
+            // Prepare data for combined chart
+            const combinedData = {
+                labels: null, // Set the labels once based on the first stock's dates
+                datasets: []
+            };
+
+            // Loop through each share and create a chart
+            for (const share of metadata.shares) {
+                await createChartForShare(share, combinedData);
+            }
+
+            // Create combined chart
+            createCombinedChart(combinedData);
+        }
+
+        // Function to create combined chart
+        function createCombinedChart(combinedData) {
+            const ctx = document.getElementById('combinedChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: combinedData,
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'P/E Ratio'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Generate a random color for the dataset lines
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Load shares metadata from isins.json and create charts when the page is loaded
+        window.onload = loadSharesAndCreateCharts;
+
+    </script>
+</body>
+</html>
