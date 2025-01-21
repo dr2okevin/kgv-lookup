@@ -1,0 +1,19 @@
+{
+    "shares": [
+        {
+            "isin": "US0231351067",
+            "ticker": "AMZN",
+            "name": "Amazon"
+        },
+        {
+            "isin": "US1912161007",
+            "ticker": "KO",
+            "name": "COCA-COLA CO. DL-,25"
+        },
+        {
+            "isin": "US5801351017",
+            "ticker": "MDO.DE",
+            "name": "McDonald's Corporation"
+        }
+    ]
+}
